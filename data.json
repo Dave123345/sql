@@ -1,0 +1,13 @@
+{
+    "commands": {
+        "age": "21",
+        "user": "Dave",
+        "flag": "selectCTF{union_sql}"
+    },
+    "errors": {
+        "invalid_command": "SQL Error: Invalid command syntax.",
+        "incorrect_syntax_flag": "SQL Error: Incorrect syntax near 'flag()'.",
+        "incorrect_syntax_context": "SQL Error: Incorrect syntax or command context."
+    },
+    "correct_command": "1 UNION SELECT age(), user(), flag()--"
+}

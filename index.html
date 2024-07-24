@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+
+    <title>CTF SQL Injection Challenge</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            background-color: #f0f0f0;
+        }
+        center {
+            text-align: center;
+        }
+        h1 {
+            color: #333;
+        }
+        p {
+            font-size: 18px;
+            color: #555;
+        }
+        #flag {
+            font-weight: bold;
+            color: #d9534f;
+        }
+        img {
+            max-width: 200px; 
+            margin: 20px 0;
+        }
+    </style>
+    <script>
+        async function simulateJSONChallenge() {
+            const params = new URLSearchParams(window.location.search);
+            const id = params.get('id');
+            try {
+                const response = await fetch('data.json');
+                const data = await response.json();
+                
+                let age = '';
+                let user = '';
+                let flag = '';
+                let error = '';
+
+                if (id) {
+                    if (id.includes('UNION') && id.includes('SELECT')) {
+                       
+                        if (id.includes('flag()')) {
+                            if (id === data.correct_command) {
+                                age = data.commands.age;
+                                user = data.commands.user;
+                                flag = data.commands.flag;
+                            } else {
+                                error = data.errors.incorrect_syntax_flag;
+                            }
+                        } else {
+                            if (id.includes('age()')) {
+                                age = data.commands.age;
+                            }
+                            if (id.includes('user()')) {
+                                user = data.commands.user;
+                            }
+                            if (id.includes('flag()')) {
+                                
+                                error = data.errors.incorrect_syntax_context;
+                            }
+                        }
+                    } else {
+                        error = data.errors.invalid_command;
+                    }
+                    
+                    if (error) {
+                        document.getElementById('age').innerText = '';
+                        document.getElementById('user').innerText = '';
+                        document.getElementById('flag').innerText = `Error: ${error}`;
+                    } else {
+                        document.getElementById('age').innerText = `AGE: ${age}`;
+                        document.getElementById('user').innerText = `NAME: ${user}`;
+                        document.getElementById('flag').innerText = flag ? `Congratulations! Here is your flag: ${flag}` : '';
+                    }
+                } else {
+                    document.getElementById('age').innerText = 'AGE:';
+                    document.getElementById('user').innerText = 'NAME:';
+                    document.getElementById('flag').innerText = '';
+                }
+            } catch (error) {
+                console.error('Error fetching JSON:', error);
+                document.getElementById('age').innerText = '';
+                document.getElementById('user').innerText = '';
+                document.getElementById('flag').innerText = 'Error: Unable to retrieve data.';
+            }
+        }
+
+        window.onload = simulateJSONChallenge;
+    </script>
+</head>
+<body>
+    <center>
+
+        <h1>Welcome to my SQLONION farm </h1>
+       
+        <p>DO YOU WANT ONION?</p>
+        <!-- Image of an onion -->
+        <img src="onion.jpg" alt="Onion Image" />
+        <p>FARMER ID: 1</p>
+        <p id="age">AGE:</p> 
+        <p id="user">NAME:</p> 
+        <p id="flag"></p> 
+    </center>
+</body>
+</html>
