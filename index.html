@@ -3,8 +3,6 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    
-
     <title>CTF SQL Injection Challenge</title>
     <style>
         body {
@@ -50,7 +48,7 @@
 
                 if (id) {
                     if (id.includes('UNION') && id.includes('SELECT')) {
-                       
+                        
                         if (id.includes('flag()')) {
                             if (id === data.correct_command) {
                                 age = data.commands.age;
@@ -96,17 +94,31 @@
                 document.getElementById('flag').innerText = 'Error: Unable to retrieve data.';
             }
         }
-
         window.onload = simulateJSONChallenge;
+
+        // Disable right-click
+        document.addEventListener('contextmenu', event => event.preventDefault());
+
+        // Disable specific key combinations
+        document.addEventListener('keydown', event => {
+            if (
+                event.ctrlKey && (event.key === 'u' || event.key === 'U') || // Ctrl+U
+                event.key === 'F12' || // F12
+                (event.ctrlKey && event.shiftKey && event.key === 'I') || // Ctrl+Shift+I
+                (event.ctrlKey && event.shiftKey && event.key === 'J') || // Ctrl+Shift+J
+                (event.ctrlKey && event.key === 'S') || // Ctrl+S (optional for source saving)
+                (event.ctrlKey && event.key === 'H') || // Ctrl+H (optional for history)
+                (event.ctrlKey && event.key === 'A') // Ctrl+A (optional for select all)
+            ) {
+                event.preventDefault();
+            }
+        });
     </script>
 </head>
 <body>
     <center>
-
         <h1>Welcome to my SQLONION farm </h1>
-       
         <p>DO YOU WANT ONION?</p>
-        <!-- Image of an onion -->
         <img src="onion.jpg" alt="Onion Image" />
         <p>FARMER ID: 1</p>
         <p id="age">AGE:</p> 
